@@ -388,6 +388,12 @@ ZIR (RFC+RFR) r²: 0.8579468997736154
 RFR r²: 0.7691291933110612
 ```
 
+!!! info "Sample weights and retraining"
+
+    When `sample_weight` is passed to `.fit()`, it drives both training stages: samples with zero weight are excluded from training entirely, so they cannot introduce a class of their own in the classifier. The classifier learns from the remaining samples whether the target is non-zero, and the regressor is trained only on the remaining samples with a non-zero target, using their weights.
+
+    Every call to `.fit()` trains fresh clones of the `classifier` and `regressor` you passed in: previously fitted sub-estimators are never reused, and the objects themselves are never mutated.
+
 If the underlying classifier is able to predict the _probability_ of a sample to be zero (i.e. it implements a `predict_proba` method), then the `ZeroInflatedRegressor` can be used to predict the probability of a sample being non-zero _times_doc the expected value of such sample.
 
 This quantity is sometimes called _risk estimate_ or _expected impact_, however, to adhere to scikit-learn convention, we made it accessible via the  `score_samples` method.
